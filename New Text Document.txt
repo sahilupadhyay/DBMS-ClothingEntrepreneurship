@@ -1,0 +1,19 @@
+     String url="jdbc:mysql://localhost:3306/project2014?zeroDateTimeBehavior=convertToNull";
+        String driver="com.mysql.jdbc.Driver";
+        String username="root";
+        String password="meena.";
+    try{
+        Class.forName(driver).newInstance();
+        Connection conn ;
+        conn = DriverManager.getConnection(url,username,password);
+        Statement s=conn.createStatement();
+        ResultSet rs;
+        /*String stat=Username.getText();
+        int i=Integer.parseInt(stat);
+        rs=s.executeQuery("insert into niit (x) values ('"+i+"') ");*/
+       
+        }
+        catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e){
+      System.err.println(e.getMessage()); // JOptionPane.showMessageDialog(null, e);
+    }   
+    

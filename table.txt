@@ -1,0 +1,104 @@
+
+        DefaultTableModel m=(DefaultTableModel)t6.getModel();
+        while (m.getRowCount() > 0){
+            for (int i = 0; i < m.getRowCount(); ++i){
+                m.removeRow(i);}}
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            Connection conn ;
+            conn= DriverManager.getConnection("jdbc:mysql://localhost:3306/panna2","root","pooja");
+            Statement st ;
+            st= conn.createStatement();
+            ResultSet res ;
+            res= st.executeQuery("select * from t20");
+            while (res.next())
+            {
+                String eid = res.getString("emp_id");
+		String name = res.getString("emp_name");
+		String address = res.getString("address");
+		int age = res.getInt("age");
+		String did = res.getString("dep_id");
+                m.addRow(new Object[]{eid,name,address,age,did});
+            }
+
+            }catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {	System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+        }
+        // TODO add your handling code here:
+    }                                  
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        String url = "jdbc:mysql://localhost:3306/panna2";
+        String driver = "com.mysql.jdbc.Driver";
+        String userName = "root";
+        String password = "pooja";
+
+        try{
+            Class.forName(driver).newInstance();
+            Connection conn ;
+            conn= DriverManager.getConnection(url,userName,password);
+            int a=Integer.parseInt(jlicno.getText());
+            int b=Integer.parseInt(jfid.getText());
+            int c=Integer.parseInt(getUser());
+
+            CallableStatement cs ;
+            cs= conn.prepareCall("{call givelic(? , ? , ?)}");
+            cs.setInt(1, a);
+            cs.setInt(2, b);
+            cs.setInt(3, c);
+            cs.execute();
+            cs.close();
+
+            conn.close();
+            JOptionPane.showMessageDialog(null,"License Issued");
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e) {System.err.println("Got an exception!");
+            System.err.println(e.getMessage());
+
+        }
+
+
+*********************************************************************************************
+*********************************************************************************************
+public void close(){  WindowEvent w = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(w);}
+
+
+
+
+
+
+mysql> insert into t1 values('1001','Avish Kumar','Cloth Emporium',50,'Delhi',1000);
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t4 values('101','Silk',250,1000);
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t5 values('1001','101');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t14 values('S1','South Ex',10,'Fashion Club',250);
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t7 values('C1',500,'Woolen');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t19 values('C1','Yellow');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t15 values('S1','C1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t24 values('Fashion Club','Annapoorna');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t20 values('1','Ajay','Lucknow',12000,22,'D2');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t21 values('D2','Salesman','Prakhar');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t16 values('S1','1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t8 values('City_1','Delhi');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t22 values('C1','City_1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t2 values('1001','1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t3 values('1001','C1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t9 values('City_1','S1');
+Query OK, 1 row affected (0.06 sec)
+mysql> insert into t10 values('City_1','1001');
+Query OK, 1 row affected (0.06 sec)

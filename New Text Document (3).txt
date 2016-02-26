@@ -1,0 +1,30 @@
+String url="jdbc:oracle:thin:@localhost:1521:orcl";
+        String driver="oracle.jdbc.OracleDriver";
+        String username="hr";
+        String password="hr";
+    try{
+        Class.forName(driver).newInstance();
+        Connection conn ;
+        conn = DriverManager.getConnection(url,username,password);
+        Statement s=conn.createStatement();
+        ResultSet rs;
+        /*String stat=Username.getText();
+        int i=Integer.parseInt(stat);
+        rs=s.executeQuery("insert into niit (x) values ('"+i+"') ");*/
+        rs=s.executeQuery("select employee_id from employees where employee_id=101");
+        while(rs.next()){
+            String st=rs.getString("employee_id");
+            //System.out.println(st);
+            display1.setText(st);
+        }
+        conn.close();
+        /*conn.close();
+        String str;
+        str=Username.getText();
+        if(str.equals("sahil"))
+        {
+            System.out.println("Hello World");
+        }*/
+    }catch(ClassNotFoundException | InstantiationException | IllegalAccessException | SQLException e){
+      System.err.println(e.getMessage()); // JOptionPane.showMessageDialog(null, e);
+    }   

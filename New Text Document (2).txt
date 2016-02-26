@@ -1,0 +1,134 @@
+mysql> delimiter $$
+mysql> create trigger trig
+    -> after insert on t17
+    -> for each row
+    -> begin
+    -> insert into t18 values(new.cloth_id,'S','MALE');
+    -> insert into t18 values(new.cloth_id,'M','MALE');
+    -> insert into t18 values(new.cloth_id,'L','MALE');
+    -> insert into t18 values(new.cloth_id,'S','FEMALE');
+    -> insert into t18 values(new.cloth_id,'M','FEMALE');
+    -> insert into t18 values(new.cloth_id,'L','FEMALE');
+    -> end $$
+Query OK, 0 rows affected (0.13 sec)
+////////////////////////////make changes to table t17------change primary key
+
+mysql> delimiter $$
+mysql> create trigger trig1
+    -> after insert on t11
+    -> for each row
+    -> begin
+    -> update t20
+    -> set salary=salary+500
+    -> where emp_id=new.emp_id;
+    -> end$$
+Query OK, 0 rows affected (0.58 sec)
+
+mysql> delimiter $$
+mysql> create trigger trig2
+    -> before delete on t17
+    -> for each row
+    -> begin
+    -> delete from t18 where cloth_id=old.cloth_id;
+    -> delete from t19 where cloth_id=old.cloth_id;
+    -> end$$
+Query OK, 0 rows affected (0.52 sec)
+
+mysql> delimiter $$
+mysql> create trigger trig3
+    -> after insert on t20
+    -> for each row
+    -> begin
+    -> insert into t25
+    -> values(new.emp_id,15000);
+    -> end $$
+Query OK, 0 rows affected (0.09 sec)
+
+ delimiter $$
+ create procedure pro (in s_id varchar(20))
+     begin
+     select max(prize) maximum1,avg(prize) minimum1
+     from t15 join t17
+     on(t15.cloth_id=t17.cloth_id)
+     group by show_id
+     having show_id=s_id;
+     end$$
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> delimiter $$
+mysql> create procedure pro1 (in pmax integer,in pmin integer)
+    -> begin
+    -> select t17.cloth_id,material,colour
+    -> from t17 join t19
+    -> on(t17.cloth_id=t19.cloth_id)
+    -> where prize<pmax and prize>pmin;
+    -> end$$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter $$
+mysql> create procedure pro2()
+    -> begin
+    -> create view view1 as
+    -> select count(distinct show_id) show_count
+    -> from t3 join t15
+    -> on(t3.cloth_id=t15.cloth_id)
+    -> group by fac_id;
+    -> create view view2 as
+    -> select max(show_count) max_show_count from view1;
+    -> select t3.fac_id,fac_name,count(distinct show_id)
+    -> from t1 join t3
+    -> on(t1.fac_id=t3.fac_id)
+    -> join t15
+    -> on(t3.cloth_id=t15.cloth_id)
+    -> group by fac_id
+    -> having count(distinct show_id) in(select max_show_count from view2);
+    -> end$$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter $$
+mysql> create procedure curs(in cityid varchar(20))
+    -> begin
+    -> declare sid varchar(20);
+    -> declare exit_loop boolean;
+    -> declare curt cursor for
+    -> select show_id from t9
+    -> where city_id=cityid;
+    -> declare continue handler for not found set exit_loop=true;
+    -> open curt;
+    -> tloop: loop
+    -> fetch curt into sid;
+    -> if exit_loop then
+    -> close curt;
+    -> leave tloop;
+    -> end if;
+    -> select show_id,name from t14 where show_id=sid;
+    -> end loop;
+    -> end $$
+Query OK, 0 rows affected (0.00 sec)
+
+mysql>delimiter $$
+mysql> create view v12 as
+    -> select fac_id,show_id
+    -> from t3 join t15
+    -> on(t3.cloth_id=t15.cloth_id);
+    -> $$
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> create procedure curs1(in facid varchar(20))
+    -> begin
+    -> declare sid varchar(20);
+    -> declare exit_loop boolean;
+    -> declare curt1 cursor for
+    -> select distinct show_id from v12 where fac_id=facid;
+    -> declare continue handler for not found set exit_loop=true;
+    -> open curt1;
+    -> tloop: loop
+    -> fetch curt1 into sid;
+    -> if exit_loop then
+    -> close curt1;
+    -> leave tloop;
+    -> end if;
+    -> select show_id,name from t14 where show_id=sid;
+    -> end loop;
+    -> end $$
+Query OK, 0 rows affected (0.00 sec)
